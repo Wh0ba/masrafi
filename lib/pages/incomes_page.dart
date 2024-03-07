@@ -3,6 +3,7 @@ import 'package:masrafi/models/m_category.dart';
 import 'package:masrafi/models/m_transaction.dart';
 import 'package:masrafi/widgets/add_item_dialog.dart';
 import 'package:masrafi/widgets/item_list_widget.dart';
+import 'package:masrafi/widgets/remining_money.dart';
 
 import '../handlers/db.dart';
 
@@ -36,34 +37,41 @@ class _IncomePageState extends State<IncomePage> with TickerProviderStateMixin {
         toolbarHeight: 80,
         title: const Text('ايراداتي'),
       ),
-      body:
-          Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        const Spacer(),
-        FutureBuilder(
-          future: DB.instance.getTransactions(widget.userid),
-          initialData: const [],
-          builder: (context, snapshot) {
-            List<MTransaction> data = [];
-            if (snapshot.hasData) {
-              data = List<MTransaction>.from(snapshot.data!);
-            }
-            return SingleChildScrollView(
-              padding: const EdgeInsets.only(top: 8),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height / 1.8,
-                child: ItemList(
-                  placeholder: "أضف مصروف جديد",
-                  items: data
-                      .where((element) =>
-                          element.categoryID == MCategory.income.id)
-                      .toList(),
-                  onRemove: (index) {},
+      body: FutureBuilder(
+        future: DB.instance.getTransactions(widget.userid),
+        initialData: const [],
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          List<MTransaction> data = List<MTransaction>.from(snapshot.data!);
+          return Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                remainingMoney(data),
+                const Divider(),
+                const Spacer(),
+                SingleChildScrollView(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 1.8,
+                    child: ItemList(
+                      placeholder: "أضف مصروف جديد",
+                      items: data
+                          .where((element) =>
+                              element.categoryID == MCategory.income.id)
+                          .toList(),
+                      onRemove: (index) async {
+                            await DB.instance.deleteTransaction(index);
+
+                            setState(() {});
+                          },
+                    ),
+                  ),
                 ),
-              ),
-            );
-          },
-        ),
-      ]),
+              ]);
+        },
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
       floatingActionButton: FloatingActionButton(
           shape: const CircleBorder(),

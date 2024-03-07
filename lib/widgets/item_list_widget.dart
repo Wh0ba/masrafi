@@ -31,7 +31,7 @@ class _ItemListState extends State<ItemList> {
               itemBuilder: ((context, index) {
                 return ItemCard(
                   item: widget.items[index],
-                  removeItemCallback: () => widget.onRemove(index),
+                  removeItemCallback: () => widget.onRemove(widget.items[index].id!),
                 );
               }))
           : Center(

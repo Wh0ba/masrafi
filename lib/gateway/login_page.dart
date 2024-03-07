@@ -1,7 +1,7 @@
 import 'package:masrafi/handlers/db.dart';
 import 'package:masrafi/models/m_user.dart';
 import 'package:masrafi/pages/homepage.dart';
-import 'package:masrafi/widgets/ProgressHUD.dart';
+import 'package:masrafi/widgets/progress_hud.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -223,7 +223,6 @@ class _LoginPageState extends State<LoginPage> {
                       ))));
         }
       }).catchError((onError) {
-        print(onError);
         const snackBar =
             SnackBar(content: Text('اسم المستخدم او كلمة المرور غير صحيحة '));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -268,7 +267,6 @@ class _LoginPageState extends State<LoginPage> {
                       ))));
         }
       }).catchError((onError) {
-        print(onError);
         const snackBar = SnackBar(content: Text('اسم المستخدم موجود مسبقاً'));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         setState(() {

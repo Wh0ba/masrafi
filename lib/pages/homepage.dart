@@ -1,9 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:masrafi/handlers/db.dart';
-import 'package:masrafi/models/m_category.dart';
-import 'package:masrafi/models/m_transaction.dart';
 import 'package:masrafi/pages/expenses_page.dart';
 import 'package:masrafi/pages/incomes_page.dart';
 
@@ -40,18 +35,6 @@ class _HomepageState extends State<Homepage> {
               const Text('Page 3')
             ].elementAt(_selectedIndex),
           ),
-          _selectedIndex != 2
-              ? Container(
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary),
-                  margin: const EdgeInsets.only(top: 130),
-                  child: ListTile(
-                    title: const Text("النقود المتبقية",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    trailing: calculateMoney(),
-                  ),
-                )
-              : Container(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -75,30 +58,6 @@ class _HomepageState extends State<Homepage> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
-    );
-  }
-
-  Widget calculateMoney() {
-    return FutureBuilder(
-      future: DB.instance.getTransactions(widget.userid),
-      initialData: const [],
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          List<MTransaction> data = List<MTransaction>.from(snapshot.data);
-          num totalExpenses = data
-              .where((element) => element.categoryID < 10)
-              .fold(0,
-                  (previousValue, element) => previousValue + element.amount);
-          num totalIncome = data
-              .where((element) => element.categoryID == MCategory.income.id)
-              .fold(0,
-                  (previousValue, element) => previousValue + element.amount);
-          num total = totalIncome - totalExpenses;
-          return Text('$total IQD', style: const TextStyle(fontSize: 18));
-        } else {
-          return const Text('0 IQD');
-        }
-      },
     );
   }
 }

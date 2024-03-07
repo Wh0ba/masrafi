@@ -77,11 +77,22 @@ class DB {
     final db = await instance.database;
     final List<Map<String, dynamic>> transactionsMap =
         await db.rawQuery('SELECT * FROM transactions WHERE user_id = $userid');
-    print(transactionsMap);
     List<MTransaction> transactions =
         transactionsMap.map((e) => MTransaction.fromMap(e)).toList();
-    print(transactions);
     return transactions;
+  }
+
+  Future<bool> deleteTransaction(int id) async {
+    try {
+      final db = await instance.database;
+      await db.transaction((txn) async {
+        await txn
+            .execute('DELETE FROM transactions WHERE transaction_id = $id');
+      });
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   Future<bool> addTransaction(MTransaction transaction, int userID) async {
