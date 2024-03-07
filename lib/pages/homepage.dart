@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:masrafi/pages/expenses_page.dart';
 import 'package:masrafi/pages/incomes_page.dart';
+import 'package:masrafi/pages/reports_page.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key, required this.userid});
@@ -32,7 +33,7 @@ class _HomepageState extends State<Homepage> {
               IncomePage(
                 userid: widget.userid,
               ),
-              const Text('Page 3')
+              ReportsPage(userID: widget.userid)
             ].elementAt(_selectedIndex),
           ),
         ],

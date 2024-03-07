@@ -12,7 +12,7 @@ Widget remainingMoney(List<MTransaction> data) {
   num total = totalIncome - totalExpenses;
   return ListTile(
     trailing: Text(
-      '$total IQD',
+      'د.ع $total',
       style: const TextStyle(fontSize: 20),
     ),
     leading: const Text('المتبقي',
