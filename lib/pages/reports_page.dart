@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:masrafi/gateway/login_page.dart';
 import 'package:masrafi/handlers/db.dart';
 import 'package:masrafi/models/m_category.dart';
 import 'package:masrafi/models/m_transaction.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:masrafi/shared.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ReportsPage extends StatefulWidget {
   const ReportsPage({super.key, required this.userID});
@@ -16,6 +19,17 @@ class _ReportsPageState extends State<ReportsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              SharedPreferences.getInstance().then((prefs) {
+                prefs.remove(tokenKey);
+              });
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage(),));
+            },
+            icon: const Icon(Icons.logout),
+          ),
+        ],
         title: const Text('التقارير'),
       ),
       body: FutureBuilder(

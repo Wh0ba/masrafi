@@ -4,10 +4,11 @@ import 'package:masrafi/pages/incomes_page.dart';
 import 'package:masrafi/pages/reports_page.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({super.key, required this.userid});
+  const Homepage({Key? key, required this.userid}) : super(key: key);
   final int userid;
+
   @override
-  State<Homepage> createState() => _HomepageState();
+  _HomepageState createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
@@ -21,26 +22,17 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    final pages = [
+      ExpensesPage(userid: widget.userid),
+      IncomePage(userid: widget.userid),
+      ReportsPage(userID: widget.userid),
+    ];
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          Center(
-            child: [
-              ExpensesPage(
-                userid: widget.userid,
-              ),
-              IncomePage(
-                userid: widget.userid,
-              ),
-              ReportsPage(userID: widget.userid)
-            ].elementAt(_selectedIndex),
-          ),
-        ],
-      ),
+      body: Center(child: pages.elementAt(_selectedIndex)),
       bottomNavigationBar: BottomNavigationBar(
-        selectedLabelStyle:
-            const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
         selectedItemColor: Theme.of(context).colorScheme.primary,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.onBackground,
       body: ProgressHUD(
         inAsyncCall: inAsyncCall,
         color: Theme.of(context).colorScheme.primary,

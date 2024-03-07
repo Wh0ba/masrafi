@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:masrafi/gateway/login_page.dart';
 import 'package:masrafi/models/m_category.dart';
 import 'package:masrafi/models/m_transaction.dart';
+import 'package:masrafi/shared.dart';
 import 'package:masrafi/widgets/add_item_dialog.dart';
 import 'package:masrafi/widgets/item_list_widget.dart';
 import 'package:masrafi/widgets/remining_money.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../handlers/db.dart';
 
@@ -32,7 +35,17 @@ class _IncomePageState extends State<IncomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
+      appBar: AppBar(actions: [
+          IconButton(
+            onPressed: () {
+              SharedPreferences.getInstance().then((prefs) {
+                prefs.remove(tokenKey);
+              });
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage(),));
+            },
+            icon: const Icon(Icons.logout),
+          ),
+        ],
         centerTitle: true,
         toolbarHeight: 80,
         title: const Text('ايراداتي'),
