@@ -1,5 +1,4 @@
 import 'package:bcrypt/bcrypt.dart';
-import 'package:masrafi/models/m_category.dart';
 import 'package:masrafi/models/m_transaction.dart';
 import 'package:masrafi/models/m_user.dart';
 import 'package:sqflite/sqflite.dart';
@@ -11,7 +10,7 @@ import 'package:path/path.dart';
 class DB {
   static final DB instance = DB._init();
   static Database? _database;
-
+  // static List<MCategory>? _categories;
   DB._init();
 
   Future<Database> get database async {
@@ -99,18 +98,19 @@ class DB {
     }
   }
 
-  // Future<List<MCategory>> getCategories() async {
-  //   final db = await instance.database;
-  //   final List<Map> categoriesMap =
-  //       await db.rawQuery('SELECT * FROM categories');
-  //   List<MCategory> categories = [];
-  //   for (var category in categoriesMap) {
-  //     final MCategory mCategory = MCategory(
-  //       id: category['category_id'],
-  //       name: category['category_name'],
-  //     );
-  //     categories.add(mCategory);
-  //   }
-  //   return categories;
-  // }
+//   Future<List<MCategory>> get getMCategories async {
+// if (_categories != null) return Future.value(_categories!);
+//     final db = await instance.database;
+//     final List<Map> categoriesMap =
+//         await db.rawQuery('SELECT * FROM categories');
+//     List<MCategory> categories = [];
+//     for (var category in categoriesMap) {
+//       final MCategory mCategory = MCategory(
+//         id: category['category_id'],
+//         name: category['category_name'],
+//       );
+//       categories.add(mCategory);
+//     }
+//     return categories;
+//   }
 }

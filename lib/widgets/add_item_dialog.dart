@@ -3,8 +3,12 @@ import 'package:masrafi/handlers/helpers.dart';
 import 'package:masrafi/models/m_category.dart';
 import 'package:intl/intl.dart' as intl;
 
-Future<dynamic> addNewItemDialog(BuildContext context,
-    Function(String name, double price,DateTime date, MCategory category) callback) {
+Future<dynamic> addNewItemDialog(
+    {required BuildContext context,
+    required bool isExpense,
+    required Function(
+            String name, double price, DateTime date, MCategory category)
+        callback}) {
   MCategory selectedCategory = MCategory.food;
   DateTime date = DateTime.now();
 
@@ -54,29 +58,32 @@ Future<dynamic> addNewItemDialog(BuildContext context,
                           }
                         },
                         decoration: const InputDecoration(
-                          labelText: 'السعر',
+                          labelText: 'القيمة',
                           icon: Icon(Icons.price_change),
                         ),
                       ),
-                      ListTile(
-                        title: DropdownButton(
-                          items: [
-                            ...MCategory.values
-                                .where((element) => element.id < 10)
-                                .map((e) => DropdownMenuItem(
-                                      value: e,
-                                      child: Text(e.name),
-                                    ))
-                                .toList()
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              selectedCategory = value ?? MCategory.food;
-                            });
-                          },
-                          value: selectedCategory,
-                        ),
-                      ),
+                      isExpense
+                          ? ListTile(
+                              title: DropdownButton(
+                              
+                                items: [
+                                  ...MCategory.values
+                                      .where((element) => element.id < 10)
+                                      .map((e) => DropdownMenuItem(
+                                            value: e,
+                                            child: Text(e.name),
+                                          ))
+                                      .toList()
+                                ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedCategory = value ?? MCategory.food;
+                                  });
+                                },
+                                value: selectedCategory,
+                              ),
+                            )
+                          : Container(),
                       ListTile(
                         title: Text(
                             intl.DateFormat('y-M-d').format(date).toString()),
@@ -113,8 +120,11 @@ Future<dynamic> addNewItemDialog(BuildContext context,
                         color: Theme.of(context).colorScheme.background)),
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    callback(nameController.text,
-                        double.parse(priceController.text),date, selectedCategory);
+                    callback(
+                        nameController.text,
+                        double.parse(priceController.text),
+                        date,
+                        isExpense ? selectedCategory : MCategory.income);
                     Navigator.pop(context);
                   }
                 })
