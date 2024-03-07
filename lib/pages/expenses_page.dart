@@ -38,17 +38,19 @@ class _ExpensesPageState extends State<ExpensesPage>
       appBar: AppBar(
         title: const Text('المصروفات'),
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {
-              SharedPreferences.getInstance().then((prefs) {
-                prefs.remove(tokenKey);
-              });
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage(),));
-            },
-            icon: const Icon(Icons.logout),
-          ),
-        ],
+        leading: IconButton(
+          onPressed: () {
+            SharedPreferences.getInstance().then((prefs) {
+              prefs.remove(tokenKey);
+            });
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginPage(),
+                ));
+          },
+          icon: const Icon(Icons.logout),
+        ),
         toolbarHeight: 80,
       ),
       body: FutureBuilder(
@@ -71,7 +73,7 @@ class _ExpensesPageState extends State<ExpensesPage>
                   SingleChildScrollView(
                     padding: const EdgeInsets.only(top: 8),
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height / 1.8,
+                      height: MediaQuery.of(context).size.height / 1.9,
                       child: ItemList(
                         placeholder: "أضف مصروف جديد",
                         items: data

@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
 
               Text(
-                "🩷 الرجاء تسجيل الدخول لعرض مصروفاتكم ",
+                " الرجاء تسجيل الدخول لعرض مصروفاتكم ",
                 style: TextStyle(
                     color: Colors.grey.shade700, fontWeight: FontWeight.bold),
               ),

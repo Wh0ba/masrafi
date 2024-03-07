@@ -19,17 +19,21 @@ class _ReportsPageState extends State<ReportsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () {
-              SharedPreferences.getInstance().then((prefs) {
-                prefs.remove(tokenKey);
-              });
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage(),));
-            },
-            icon: const Icon(Icons.logout),
-          ),
-        ],
+        leading: IconButton(
+          onPressed: () {
+            SharedPreferences.getInstance().then((prefs) {
+              prefs.remove(tokenKey);
+            });
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginPage(),
+                ));
+          },
+          icon: const Icon(Icons.logout),
+        ),
+        toolbarHeight: 80,
+        centerTitle: true,
         title: const Text('التقارير'),
       ),
       body: FutureBuilder(
@@ -51,11 +55,16 @@ class _ReportsPageState extends State<ReportsPage> {
               elements: data,
               groupBy: (transaction) =>
                   '${transaction.date.year}-${transaction.date.month.toString().padLeft(2, '0')}',
-              groupSeparatorBuilder: (String groupByValue) => Text(
-                groupByValue,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+              groupSeparatorBuilder: (String groupByValue) => Container(
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.background),
+                child: Text(
+                  textAlign: TextAlign.center,
+                  groupByValue,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               itemBuilder: (context, transaction) => ListTile(

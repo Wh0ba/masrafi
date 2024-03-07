@@ -35,17 +35,20 @@ class _IncomePageState extends State<IncomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(actions: [
-          IconButton(
-            onPressed: () {
-              SharedPreferences.getInstance().then((prefs) {
-                prefs.remove(tokenKey);
-              });
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage(),));
-            },
-            icon: const Icon(Icons.logout),
-          ),
-        ],
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            SharedPreferences.getInstance().then((prefs) {
+              prefs.remove(tokenKey);
+            });
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginPage(),
+                ));
+          },
+          icon: const Icon(Icons.logout),
+        ),
         centerTitle: true,
         toolbarHeight: 80,
         title: const Text('ايراداتي'),
@@ -65,20 +68,19 @@ class _IncomePageState extends State<IncomePage> with TickerProviderStateMixin {
                 const Divider(),
                 const Spacer(),
                 SingleChildScrollView(
-                  padding: const EdgeInsets.only(top: 8),
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height / 1.8,
+                    height: MediaQuery.of(context).size.height / 1.9,
                     child: ItemList(
-                      placeholder: "أضف مصروف جديد",
+                      placeholder: "أضف إيراد جديد",
                       items: data
                           .where((element) =>
                               element.categoryID == MCategory.income.id)
                           .toList(),
                       onRemove: (index) async {
-                            await DB.instance.deleteTransaction(index);
+                        await DB.instance.deleteTransaction(index);
 
-                            setState(() {});
-                          },
+                        setState(() {});
+                      },
                     ),
                   ),
                 ),
