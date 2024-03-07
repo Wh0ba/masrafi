@@ -23,6 +23,20 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      int userid = prefs.getInt(tokenKey) ?? 0;
+      if (userid > 0) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Homepage(
+                        userid: userid,
+                      ),
+                    )));
+      }
+    });
   }
 
   @override
@@ -190,19 +204,23 @@ class _LoginPageState extends State<LoginPage> {
         inAsyncCall = true;
       });
       DB.instance.login(username, password).then((MUser user) {
-        String token = user.id.toString();
+        int token = user.id;
         setState(() {
           inAsyncCall = false;
         });
-        if (token.isNotEmpty) {
+        if (token > 0) {
           SharedPreferences.getInstance()
-              .then((pref) => {pref.setString(tokenKey, token)});
+              .then((pref) => {pref.setInt(tokenKey, token)});
           const snackBar = SnackBar(content: Text('تم تسجيل الدخول بنجاح'));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => const Homepage()));
+                  builder: (BuildContext context) => Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Homepage(
+                        userid: token,
+                      ))));
         }
       }).catchError((onError) {
         print(onError);
@@ -231,19 +249,23 @@ class _LoginPageState extends State<LoginPage> {
         inAsyncCall = true;
       });
       DB.instance.register(username, password).then((MUser user) {
-        String token = user.id.toString();
+        int token = user.id;
         setState(() {
           inAsyncCall = false;
         });
-        if (token.isNotEmpty) {
+        if (token > 0) {
           SharedPreferences.getInstance()
-              .then((pref) => {pref.setString(tokenKey, token)});
+              .then((pref) => {pref.setInt(tokenKey, token)});
           const snackBar = SnackBar(content: Text('تم التسجيل بنجاح'));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => const Homepage()));
+                  builder: (BuildContext context) => Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Homepage(
+                        userid: token,
+                      ))));
         }
       }).catchError((onError) {
         print(onError);

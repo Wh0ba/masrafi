@@ -20,11 +20,10 @@ class DB {
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, "main.db");
 
-// Check if the database exists
+    // Check if the database exists
     var exists = await databaseExists(path);
 
     if (!exists) {
-      print("Creating new copy from asset");
       try {
         await Directory(dirname(path)).create(recursive: true);
       } catch (_) {}
@@ -33,11 +32,8 @@ class DB {
           data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 
       await File(path).writeAsBytes(bytes, flush: true);
-    } else {
-      print("Opening existing database");
     }
-
-// open the database
+    // open the database
     var db = await openDatabase(path);
 
     return db;
@@ -73,9 +69,8 @@ class DB {
       });
       final user = await login(username, password);
       return user;
-    } catch (e) {
-      // Handle the error here
-      return Future.error('Registration Failed: $e');
+    } catch (_) {
+      return Future.error('فشل التسجيل');
     }
   }
 
@@ -83,7 +78,11 @@ class DB {
     final db = await instance.database;
     final List<Map<String, dynamic>> transactionsMap =
         await db.rawQuery('SELECT * FROM transactions WHERE user_id = $userid');
-    return transactionsMap.map((e) => MTransaction.fromMap(e)).toList();
+    print(transactionsMap);
+    List<MTransaction> transactions =
+        transactionsMap.map((e) => MTransaction.fromMap(e)).toList();
+    print(transactions);
+    return transactions;
   }
 
   Future<bool> addTransaction(MTransaction transaction, int userID) async {
@@ -91,7 +90,7 @@ class DB {
       final db = await instance.database;
       await db.transaction((txn) async {
         txn.execute(
-          'INSERT INTO transactions (transaction_name, transaction_amount, transaction_date, user_id, category_id) VALUES (${transaction.name}, ${transaction.amount}, ${transaction.date.millisecondsSinceEpoch}, $userID, ${transaction.categoryID})',
+          'INSERT INTO transactions (transaction_name, transaction_amount, transaction_date, user_id, category_id) VALUES ("${transaction.name}", ${transaction.amount}, ${transaction.date.millisecondsSinceEpoch}, $userID, ${transaction.categoryID})',
         );
       });
       return true;
@@ -100,18 +99,18 @@ class DB {
     }
   }
 
-  Future<List<MCategory>> getCategories() async {
-    final db = await instance.database;
-    final List<Map> categoriesMap =
-        await db.rawQuery('SELECT * FROM categories');
-    List<MCategory> categories = [];
-    for (var category in categoriesMap) {
-      final MCategory mCategory = MCategory(
-        id: category['category_id'],
-        name: category['category_name'],
-      );
-      categories.add(mCategory);
-    }
-    return categories;
-  }
+  // Future<List<MCategory>> getCategories() async {
+  //   final db = await instance.database;
+  //   final List<Map> categoriesMap =
+  //       await db.rawQuery('SELECT * FROM categories');
+  //   List<MCategory> categories = [];
+  //   for (var category in categoriesMap) {
+  //     final MCategory mCategory = MCategory(
+  //       id: category['category_id'],
+  //       name: category['category_name'],
+  //     );
+  //     categories.add(mCategory);
+  //   }
+  //   return categories;
+  // }
 }
